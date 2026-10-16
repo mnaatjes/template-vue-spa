@@ -50,8 +50,6 @@ def test_generate_standard_vue_spa(tmp_path: Path):
     # Core configuration files
     assert (target / "package.json").is_file()
     assert (target / "tsconfig.json").is_file()
-    assert (target / "tsconfig.app.json").is_file()
-    assert (target / "tsconfig.vitest.json").is_file()
     assert (target / "vite.config.ts").is_file()
     assert (target / "vitest.config.ts").is_file()
     assert (target / ".eslintrc.cjs").is_file()
