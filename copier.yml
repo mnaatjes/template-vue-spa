@@ -1,0 +1,42 @@
+# copier.yml
+_min_copier_version: "9.0.0"
+_subdirectory: "template"
+_answers_file: ".copier-answers.yml"
+
+app_name:
+  type: str
+  help: "Lowercase kebab-case application name (e.g. smb-ops-ui, reporting-portal)"
+  validator: >-
+    {% if not app_name | regex_search('^[a-z0-9]+(-[a-z0-9]+)*$') %}
+    app_name must be lowercase alphanumeric with hyphens (kebab-case).
+    {% endif %}
+
+app_description:
+  type: str
+  help: "Brief description of the frontend application"
+  default: "Vue 3 Single Page Application"
+
+default_dev_port:
+  type: int
+  help: "Vite local development server port"
+  default: 5173
+
+api_base_url_default:
+  type: str
+  help: "Default backend API proxy path"
+  default: "/api"
+
+include_pinia_store:
+  type: bool
+  help: "Include Pinia centralized state management?"
+  default: true
+
+include_architecture_scaffold:
+  type: bool
+  help: "Scaffold full Unified Process architecture/ tree?"
+  default: true
+
+include_diataxis_docs:
+  type: bool
+  help: "Scaffold 4-quadrant Diataxis docs/ tree?"
+  default: true

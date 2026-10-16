@@ -1,0 +1,15 @@
+import { createApp } from 'vue'
+{% if include_pinia_store %}
+import { createPinia } from 'pinia'
+{% endif %}
+import App from './App.vue'
+import { router } from './app/router'
+
+const app = createApp(App)
+
+{% if include_pinia_store %}
+app.use(createPinia())
+{% endif %}
+app.use(router)
+
+app.mount('#app')

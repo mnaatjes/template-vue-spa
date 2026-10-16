@@ -1,0 +1,40 @@
+<script setup lang="ts">
+defineProps<{
+  label: string
+  disabled?: boolean
+}>()
+
+defineEmits<{
+  (e: 'click'): void
+}>()
+</script>
+
+<template>
+  <button
+    type="button"
+    class="base-button"
+    :disabled="disabled"
+    @click="$emit('click')"
+  >
+    {% raw %}{{ label }}{% endraw %}
+  </button>
+</template>
+
+<style scoped>
+.base-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+.base-button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+.base-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>

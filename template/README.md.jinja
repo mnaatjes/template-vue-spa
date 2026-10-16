@@ -1,0 +1,45 @@
+# {{ app_name }}
+
+{{ app_description }}
+
+## Architectural Framework
+
+This application is built with Vue 3, TypeScript, and Vite, strictly organized according to [Feature-Sliced Design (FSD)](https://feature-sliced.design/):
+
+* `src/app/`: Application-wide configurations, routers, and global providers.
+* `src/pages/`: Route-level composition views.
+* `src/features/`: User-facing interactions and domain actions.
+* `src/entities/`: Domain entities and state stores (Pinia).
+* `src/shared/`: Reusable UI components, typed API client adapters, and utilities (strictly pure, no imports from outer layers).
+
+Architectural boundaries are enforced via `eslint-plugin-boundaries` and Vitest architectural compliance suites.
+
+## Project Setup
+
+```bash
+pnpm install
+```
+
+### Compile and Hot-Reload for Development
+
+```bash
+pnpm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```bash
+pnpm run build
+```
+
+### Run Unit and Architectural Tests
+
+```bash
+pnpm run test
+```
+
+### Lint and Fix Files
+
+```bash
+pnpm run lint
+```

@@ -1,0 +1,40 @@
+[project]
+name = "template-vue-spa"
+version = "0.1.0"
+description = "Canonical Copier template for HSL-compliant Vue 3 Feature-Sliced Design SPAs"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "copier>=9.0.0",
+    "bump-my-version>=0.28.0",
+    "pytest>=8.0.0",
+    "ruff>=0.7.3",
+    "pre-commit>=4.0.0",
+    "pyyaml>=6.0.2",
+]
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+commit_message = "chore(release): bump version to {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

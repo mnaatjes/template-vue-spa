@@ -1,0 +1,49 @@
+---
+name: "Template Quality & Generation CI"
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: "read"
+
+jobs:
+  test-template:
+    name: "Test Copier Template Generation"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v4"
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "Set up Node.js"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: "20"
+
+      - name: "Set up pnpm"
+        uses: "pnpm/action-setup@v4"
+        with:
+          version: "9"
+
+      - name: "Install Python Dependencies"
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install copier pytest bump-my-version ruff pre-commit pyyaml
+
+      - name: "Run Upstream Linters"
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: "Run Pytest Template Suite"
+        run: |
+          pytest -v
