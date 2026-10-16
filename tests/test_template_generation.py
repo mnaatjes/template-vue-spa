@@ -9,22 +9,29 @@ def has_pnpm_in_path() -> bool:
     return shutil.which("pnpm") is not None
 
 
-def run_node_command_in_docker(cwd: Path, cmd: str) -> None:
-    """Fallback runner executing Node/pnpm inside container if local pnpm is absent."""
-    docker_cmd = [
-        "docker",
-        "run",
-        "--rm",
-        "-v",
-        f"{cwd}:/app",
-        "-w",
-        "/app",
-        "node:20-alpine",
-        "sh",
-        "-c",
-        f"corepack enable && corepack prepare pnpm@9 --activate && {cmd}",
-    ]
-    subprocess.run(docker_cmd, check=True)
+def run_node_command(cwd: Path, cmd: str) -> None:
+    """Run node/pnpm command using local host pnpm if available, or container fallback."""
+    if shutil.which("pnpm") is not None:
+        subprocess.run(
+            ["sh", "-c", cmd],
+            cwd=str(cwd),
+            check=True,
+        )
+    else:
+        docker_cmd = [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            f"{cwd}:/app",
+            "-w",
+            "/app",
+            "node:20-alpine",
+            "sh",
+            "-c",
+            f"corepack enable && corepack prepare pnpm@9 --activate && {cmd}",
+        ]
+        subprocess.run(docker_cmd, check=True)
 
 
 def test_generate_standard_vue_spa(tmp_path: Path):
@@ -92,7 +99,7 @@ def test_generate_standard_vue_spa(tmp_path: Path):
 
     # Execute full build and verification inside docker container
     cmd = "pnpm install && pnpm run type-check && pnpm run lint && pnpm run test && pnpm run build"
-    run_node_command_in_docker(target, cmd)
+    run_node_command(target, cmd)
 
 
 def test_generate_minimal_vue_spa_without_pinia(tmp_path: Path):
@@ -126,4 +133,4 @@ def test_generate_minimal_vue_spa_without_pinia(tmp_path: Path):
 
     # Verify building and tests work cleanly without pinia
     cmd = "pnpm install && pnpm run type-check && pnpm run test && pnpm run build"
-    run_node_command_in_docker(target, cmd)
+    run_node_command(target, cmd)
